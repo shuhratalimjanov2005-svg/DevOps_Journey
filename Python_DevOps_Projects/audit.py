@@ -13,7 +13,6 @@ CHAT_ID = 8278904536
 def send_telegram(message):
     try:
         url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={CHAT_ID}&text={message}"
-        requests.get(url, timeout=5)
         response = requests.get(url)
         print(response.json())
     except Exception as e:
