@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  # Наша база данных
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: monitoring_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  # Твой бот-аудитор
+  bot:
+    build: . # Докер посмотрит в твой Dockerfile и соберет бота
+    restart: always
+    depends_on:
+      - db # Бот будет ждать, пока база задышит
+    environment:
+      # Передаем настройки прямо в код
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: monitoring_db

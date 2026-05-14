@@ -6,6 +6,7 @@ from datetime import datetime
 import requests
 import psutil
 import time
+import psycopg2
 
 TOKEN = "8874275515:AAHjSErhnhlcvLqMgq4G8H0UtHHK9nAS9RU"
 CHAT_ID = 8278904536 
@@ -17,6 +18,31 @@ def send_telegram(message):
         print(response.json())
     except Exception as e:
         print(f"❌ Ошибка отправки в ТГ: {e}")
+
+def save_to_db(usage, message):
+    try:
+        # Подключаемся! Указываем порт 5433, как мы договорились
+        connection = psycopg2.connect(
+            user="postgres",
+            password="mysecretpassword",
+            host="127.0.0.1",
+            port="5433",
+            database="monitoring_db"
+        )
+        cursor = connection.cursor()
+        
+        # Записываем данные в наш "шкафчик"
+        insert_query = "INSERT INTO ram_alerts (ram_usage, message) VALUES (%s, %s)"
+        cursor.execute(insert_query, (usage, message))
+        
+        connection.commit()
+        cursor.close()
+        connection.close()
+        print("Данные успешно сохранены в БД! ")
+    except Exception as error:
+        print(f"Ошибка при работе с БД: {error}")
+    
+    save_to_db(ram_usage, f"Алярм! RAM забит на {ram_usage}%")
 
 def audit_my_repo():
     # --- ДАННЫЕ СИСТЕМЫ ---
