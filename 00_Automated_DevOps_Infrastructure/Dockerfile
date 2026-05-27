@@ -1,6 +1,7 @@
 # 1. Берем легкий образ Питона
 FROM python:3.9-slim
 
+ENV PYTHONUNBUFFERED=1
 # 2. Создаем папку внутри контейнера
 WORKDIR /app
 
