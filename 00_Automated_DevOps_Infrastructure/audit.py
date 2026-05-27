@@ -118,10 +118,12 @@ def audit_my_repo():
     print(f"{'='*30}\n")
 
 if __name__ == "__main__":
+    # Это сообщение будет выведено ОДИН РАЗ при старте
     print("🚀 DevOps Monitoring daemon successfully initialized...")
     
     loop_count = 0
     while True:
+        # Здесь нет print, поэтому внутри цикла бот будет работать молча
         check_cyber_attacks()
         
         if loop_count % 100 == 0:
@@ -129,4 +131,3 @@ if __name__ == "__main__":
             
         loop_count += 1
         time.sleep(3)
-
